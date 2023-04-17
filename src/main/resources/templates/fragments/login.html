@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html 
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+	<title>Login Page</title>
+</head>
+<style>
+	body {
+		margin: 0;
+		padding: 0;
+		font-family: sans-serif;
+		background-color: black;
+	}
+
+	.login-box {
+		width: 400px;
+		height: 640px;
+		background: #fff;
+		/* color: #000; */
+		top: 50%;
+		left: 50%;
+		position: absolute;
+		transform: translate(-50%, -50%);
+		box-sizing: border-box;
+		padding: 70px 30px;
+	}
+
+	h1 {
+		margin: 0;
+		padding: 0 0 35px;
+		text-align: center;
+		font-size: 28px;
+	}
+
+	label {
+		margin: 0;
+		padding: 0;
+		font-weight: bold;
+		display: block;
+	}
+
+	input[type="text"],
+	input[type="password"] {
+		width: 100%;
+		margin-bottom: 20px;
+		/* padding: 10px; */
+		border: none;
+		border-bottom: 1px solid #000;
+		background-color: transparent;
+		outline: none;
+	}
+
+	input[type="submit"] {
+		width: 340px;
+		height: 40px;
+		font-size: 18px;
+		outline: none;
+		border-radius: 5px;
+		box-sizing: border-box;
+		margin-bottom: 5px;
+		border: 1px solid gray;
+	}
+
+	input[type="submit"]:hover {
+		cursor: pointer;
+		background: #3b3b3b;
+		color: #fff;
+	}
+
+	.login button {
+		width: 340px;
+		height: 40px;
+		font-size: 18px;
+		outline: none;
+		border-radius: 5px;
+		box-sizing: border-box;
+		margin-bottom: 5px;
+		border: 1px solid gray;
+	}
+
+	form a {
+		text-decoration: none;
+		float: right;
+
+	}
+
+	.a {
+		margin-left: 10px;
+	}
+
+	.login {
+		margin-top: 30px;
+
+	}
+
+	.login a input {
+		margin-top: 3px;
+
+	}
+
+	.login-box form .login_bu {
+		margin-bottom: 30px;
+	}
+
+	.login-box img {
+		width: 96px;
+		height: 48px;
+		display: block;
+		margin: auto;
+		margin-bottom: 30px;
+		border: 1px solid gray;
+	}
+</style>
+<script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+	crossorigin="anonymous"></script>
+
+<script>
+	$(document).ready(function () {
+		const checkbox = $('#checkbox');
+
+		checkbox.change(function () {
+			if (this.checked) {
+				alert('공공PC에서 사용시 개인정보가 유출될 수 있어요! 꼭 개인 PC에서 사용하세요.');
+			}
+		});
+	});
+
+</script>
+
+<body>
+	<div class="login-box">
+		<img src="img/logo.png" alt="">
+		<h1>로그인</h1>
+
+		<form action="/login">
+			<input type="hidden" name="referer" th:value="${referer}">
+			<input type="text" id="email" name="email" placeholder="이메일을 입력하세요." required>
+			<input type="password" id="passwd" name="passwd" placeholder="비밀번호를 입력하세요." required>
+			<input class="login_bu" type="submit" value="로그인">
+			<input type="checkbox" id="checkbox">자동 로그인
+			<a href="" class="a">이메일 찾기</a>
+			<a href="">비밀번호 찾기</a> <br>
+			<input type="checkbox" name="" id="">이메일 저장
+			<a href="" style="text-decoration: underline;">로그인이 안돼나요?</a>
+			<a href="/member/register/view">회원가입&nbsp;&nbsp;&nbsp;</a>
+		</form>
+		<div class="login">
+			<a href=""><input type="submit" name="" id="" value="구글" submit></a>
+			<a href=""><input type="submit" name="" id="" value="카카오" submit></a>
+			<a href=""><input type="submit" name="" id="" value="네이버" submit></a>
+		</div>
+	</div>
+</body>
+
+</html>

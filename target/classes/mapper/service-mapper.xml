@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pro.mapper.ServiceMapper">
+
+
+	<select id="selectInquiryNum" resultType="int">
+		select
+		inquirynum_seq.nextval from dual
+	</select>
+	<insert id="insertInquiry" parameterType="inquiry">
+		insert into
+		inquiry(inquirynum, type, email, title, content)
+		values(#{inquiryNum},
+		#{type}, #{email},#{title},#{content})
+	</insert>
+	<select id="selectAllInquiry" parameterType="String"
+		resultType="inquiry">
+		select * from inquiry where email = #{email} order by
+		status asc
+	</select>
+	<select id="selectInquiry" parameterType="int"
+		resultType="inquiry">
+		select * from inquiry where inquirynum = #{inquiryNum}
+	</select>
+	<select id="selectInquiryAnswer" parameterType="int"
+		resultType="inquiryAnswer">
+		select * from inquiry_answer where inquirynum =
+		#{inquiryNum}
+	</select>
+	<delete id="deleteInquiry" parameterType="int">
+		delete from inquiry
+		where inquirynum = #{inquiryNum}
+	</delete>
+	<delete id="deleteInquiryAnswer" parameterType="int">
+		delete from
+		inquiry_answer where inquirynum = #{inquiryNum}
+	</delete>
+	<update id="updateInquiry" parameterType="inquiry">
+		update inquiry set
+		title = #{title}, content = #{content}, type = #{type} where
+		inquirynum = #{inquiryNum}
+	</update>
+	<select id="selectAllAdminInquiry" parameterType="String"
+		resultType="inquiry">
+		select * from inquiry order by status asc
+	</select>
+	<insert id="insertAdminInquiry" parameterType="inquiryAnswer">
+		insert into
+		inquiry_answer(inquirynum,title, content)
+		values(#{inquiryNum},#{title},#{content})
+	</insert>
+	<update id="updateInquiryStatus" parameterType="int">
+		update inquiry
+		set status = 1 where inquirynum = #{inquiryNum}
+	</update>
+	<select id="inquiryAdminSort" parameterType="hashMap"
+		resultType="inquiry">
+		select * from inquiry where type = #{type} and status =
+		#{answer}
+	</select>
+	<insert id="insertFile" parameterType="file">
+		insert into inquiry_file
+		values((SELECT nvl(max(filenum),0) FROM inquiry_file WHERE
+		inquirynum
+		= #{inquiryNum}) + 1,#{inquiryNum},#{path})
+	</insert>
+	<select id="selectFileList" parameterType="int"
+		resultType="file">
+		select * from inquiry_file where inquirynum =
+		#{inquiryNum}
+	</select>
+	<select id="selectImageFile" parameterType="int"
+		resultType="file">
+		select * from inquiry_file where filenum = #{fileNum}
+	</select>
+	<select id="selectFile" parameterType="hashMap"
+		resultType="file">
+		select * from inquiry_file where inquirynum =
+		#{inquiryNum}
+		and filenum = #{fileNum}
+	</select>
+	<select id="selectAllNotice" resultType="notice">
+		SELECT NOTICE.NOTICENUM, NOTICE.TITLE, NOTICE.CONTENT , NOTICE.WDATE, NOTICE.VIEWCOUNT, (SELECT COUNT(*) FROM NOTICE_COMMENT WHERE NOTICE_COMMENT.NOTICENUM = NOTICE.NOTICENUM) AS COMMENTCOUNT FROM NOTICE order by noticenum desc
+	</select>
+	<update id="updateNoticeCount" parameterType="int">
+	UPDATE notice
+		set viewcount = viewcount + 1 where noticenum= #{noticeNum}
+	</update>
+	<select id="selectNotice" parameterType="int" resultType="notice">
+		select * from notice where noticenum = #{noticeNum}
+	</select>
+	<select id="selectNoticeComment" parameterType="int" resultType="ncomment">
+		select * from notice_comment where noticenum = #{noticeNum}
+	</select>
+	<insert id="insertNoticeComment" parameterType="ncomment">
+		insert into notice_comment(commentnum,noticenum,writer,content)
+		values(ncomment_seq.nextval, #{noticeNum},#{writer},#{content})
+
+	</insert>
+	<insert id="insertNoticeLike" parameterType="hashMap">
+		insert into notice_like values(#{noticeNum}, #{email})
+	</insert>
+	<delete id="deleteNoticeLike" parameterType="hashMap">
+		delete from notice_like where noticenum = #{noticeNum} and 
+		email = #{email}
+	</delete>
+	<select id="selectNoticeLike" resultType="int" parameterType="int">
+		select count(*) from notice_like where noticenum = #{noticeNum}
+	</select>
+	<insert id="insertNoticeHate" parameterType="hashMap">
+		insert into notice_hate values(#{noticeNum}, #{email})
+	</insert>
+	<delete id="deleteNoticeHate" parameterType="hashMap">
+		delete from notice_hate where noticenum = #{noticeNum} and email = #{email}
+	</delete>
+	<select id="selectNoticeHate" resultType="int" parameterType="int">
+		select count(*) from notice_hate where noticenum = #{noticeNum}
+	</select>
+	<select id="countComment" resultType="int" parameterType="int">
+		select count(*) from notice_comment where noticenum = #{noticeNum}
+	</select>
+	<select id="searchNotice" parameterType="String" resultType="notice">
+		SELECT NOTICENUM , REPLACE (TITLE,#{search},<![CDATA['<span class="underline">${search}</span>']]>) AS TITLE ,
+		CONTENT , WDATE ,VIEWCOUNT,
+		(SELECT COUNT(*) FROM NOTICE_COMMENT WHERE NOTICE_COMMENT.NOTICENUM = NOTICE.NOTICENUM) AS COMMENTCOUNT
+		FROM NOTICE WHERE TITLE LIKE '%'||#{search}||'%' OR CONTENT LIKE '%'||#{search}||'%'
+	</select>
+	<delete id="deleteComment" parameterType="hashMap">
+		delete from notice_comment where commentnum = #{commentNum} and noticenum = #{noticeNum}
+	</delete>
+	<delete id="deleteNotice" parameterType="int">
+		delete from notice where noticenum = #{noticeNum}
+	</delete>
+	<select id="selectNoticeNum" resultType="int">
+		select noticenum_seq.nextval from dual
+	</select>
+	<insert id="addNotice" parameterType="notice">
+		insert into notice(noticenum,title,content) values(#{noticeNum},#{title},#{content})
+	</insert>
+	<update id="updateNotice" parameterType="notice">
+		update notice set title = #{title} ,content = #{content} where noticenum = #{noticeNum}
+	</update>
+	<delete id="noticeCommentAllDelete" parameterType="int">
+		delete from notice_comment where noticenum = #{noticeNum}
+	</delete>
+	<delete id="noticeLikeAllDelete" parameterType="int">
+		delete from notice_like where noticenum = #{noticeNum}
+	</delete>
+	<delete id="noticeHateAllDelete" parameterType="int">
+		delete from notice_hate where noticenum = #{noticeNum}
+	</delete>
+	<select id="inquiryTypeSort" parameterType="hashMap" resultType="inquiry">
+		select * from inquiry
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+		<if test="type != null"> 
+		type = #{type}
+		</if>
+		<if test="answer != null">
+		and status = #{answer}
+		</if>
+		</trim>
+		
+	</select>
+	
+</mapper>
